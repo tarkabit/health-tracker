@@ -1,0 +1,13 @@
+# Build artifacts
+.build/
+*.app/
+
+# Generated icon intermediates (AppIcon.icns is kept; build.sh regenerates it if missing)
+AppIcon.iconset/
+
+# Personal data — habit logs live here (iCloud-synced); not version controlled
+HabitData/
+
+# macOS / session
+.DS_Store
+.session-journal
