@@ -1,6 +1,7 @@
 # Build artifacts
 .build/
 *.app/
+dist/
 
 # Generated icon intermediates (AppIcon.icns is kept; build.sh regenerates it if missing)
 AppIcon.iconset/

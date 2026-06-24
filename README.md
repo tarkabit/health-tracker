@@ -21,6 +21,25 @@ cp -R "Health Tracker.app" /Applications/
 Open `Package.swift` in Xcode to develop with previews/debugger. `build.sh` also
 generates the app icon (`Tools/makeicon.swift` → `AppIcon.icns`) if it's missing.
 
+## Share it with others (no Apple Developer account)
+
+Build a distributable disk image (universal — Apple Silicon + Intel):
+
+```bash
+./package-dmg.sh        # → dist/Health Tracker <version>.dmg
+```
+
+Send the `.dmg`. The app is ad-hoc signed (not notarized), so the recipient allows it once:
+
+1. Open the `.dmg` and drag **Health Tracker** to **Applications**.
+2. First launch is blocked ("unidentified developer"). In Terminal, run:
+   ```bash
+   xattr -dr com.apple.quarantine "/Applications/Health Tracker.app"
+   ```
+   then open it normally. (Alternatively: **System Settings ▸ Privacy & Security ▸ Open Anyway**.)
+
+For warning-free installs on any Mac you'd need an Apple Developer ID + notarization ($99/yr).
+
 ## In the app
 
 - **Today** — every habit as a card with a one-gesture inline logger (checklist chips,

@@ -7,9 +7,9 @@ APP_NAME="Health Tracker"
 BUNDLE="${APP_NAME}.app"
 BUNDLE_ID="com.bala.healthtracker"
 
-echo "▸ Building release binary…"
-swift build -c release
-BIN_PATH="$(swift build -c release --show-bin-path)/HealthTracker"
+echo "▸ Building universal release binary (arm64 + x86_64)…"
+swift build -c release --arch arm64 --arch x86_64
+BIN_PATH="$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/HealthTracker"
 
 echo "▸ Assembling ${BUNDLE}…"
 rm -rf "$BUNDLE"
