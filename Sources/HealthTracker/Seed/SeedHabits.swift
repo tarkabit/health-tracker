@@ -15,6 +15,10 @@ enum SeedHabits {
         fields: [
             HabitField(id: "type", label: "Run type", kind: .choice, choices: ["easy", "fast", "long"]),
             HabitField(id: "distance", label: "Distance (km)", kind: .note),
+            HabitField(id: "duration", label: "Duration (mm:ss)", kind: .note),
+            HabitField(id: "pace", label: "Pace (/km)", kind: .note),
+            HabitField(id: "hr", label: "Avg HR (bpm)", kind: .counter),
+            HabitField(id: "calories", label: "Calories", kind: .counter),
             HabitField(id: "note", label: "Notes", kind: .note)
         ],
         targets: [

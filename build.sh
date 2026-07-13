@@ -49,5 +49,16 @@ echo "▸ Ad-hoc code signing…"
 codesign --force --deep --sign - "$BUNDLE" >/dev/null 2>&1 || echo "  (codesign skipped)"
 
 echo "✓ Built ${BUNDLE}"
-echo "  Run:  open \"${BUNDLE}\""
-echo "  Install:  cp -R \"${BUNDLE}\" /Applications/"
+
+# Keep the /Applications copy in sync with the freshly built bundle, so there is only
+# ever one version to launch. Skip with:  HT_NO_INSTALL=1 ./build.sh
+if [ "${HT_NO_INSTALL:-0}" != "1" ]; then
+    echo "▸ Installing to /Applications…"
+    if ditto "$BUNDLE" "/Applications/${BUNDLE}"; then
+        echo "✓ Synced /Applications/${BUNDLE}"
+    else
+        echo "  (couldn't write /Applications — sync manually: ditto \"${BUNDLE}\" /Applications/)"
+    fi
+fi
+
+echo "  Run:  open \"/Applications/${BUNDLE}\""

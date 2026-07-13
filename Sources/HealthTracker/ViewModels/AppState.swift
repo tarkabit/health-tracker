@@ -11,6 +11,9 @@ final class AppState: ObservableObject {
 
     let store: VaultStore
 
+    /// The conversational assistant, kept here so chat history survives navigation.
+    lazy var chat = ChatViewModel(state: self)
+
     init(store: VaultStore = VaultStore()) {
         self.store = store
         load()
@@ -102,6 +105,25 @@ final class AppState: ObservableObject {
 
     func addEntry(_ entry: LogEntry, to habit: Habit) {
         mutate(habit) { $0.append(entry) }
+    }
+
+    // MARK: Undo support (used by the chat assistant)
+
+    /// Snapshot the current entries for a set of habits, so a batch of writes can be reverted.
+    func entriesSnapshot(forHabitIds ids: Set<String>) -> [String: [LogEntry]] {
+        var snap: [String: [LogEntry]] = [:]
+        for id in ids { snap[id] = entriesByHabit[id] ?? [] }
+        return snap
+    }
+
+    /// Restore a previously captured snapshot, persisting each affected habit.
+    func restoreEntries(_ snapshot: [String: [LogEntry]]) {
+        for (id, arr) in snapshot {
+            guard let habit = habits.first(where: { $0.id == id }) else { continue }
+            entriesByHabit[id] = arr
+            do { try store.saveEntries(arr, for: habit) }
+            catch { errorMessage = "Undo failed: \(error.localizedDescription)" }
+        }
     }
 
     func updateEntry(_ entry: LogEntry, in habit: Habit) {

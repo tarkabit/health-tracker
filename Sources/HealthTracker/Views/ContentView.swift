@@ -2,6 +2,7 @@ import SwiftUI
 
 enum Nav {
     static let today = "__today__"
+    static let chat = "__chat__"
 }
 
 struct ContentView: View {
@@ -20,6 +21,9 @@ struct ContentView: View {
             List(selection: listSelection) {
                 Label("Today", systemImage: "sun.max.fill")
                     .tag(Nav.today)
+
+                Label("Assistant", systemImage: "sparkles")
+                    .tag(Nav.chat)
 
                 Section("Habits") {
                     ForEach(state.habits) { habit in
@@ -42,7 +46,9 @@ struct ContentView: View {
             }
         } detail: {
             Group {
-                if let id = state.selection, let habit = state.habits.first(where: { $0.id == id }) {
+                if state.selection == Nav.chat {
+                    ChatView(vm: state.chat)
+                } else if let id = state.selection, let habit = state.habits.first(where: { $0.id == id }) {
                     HabitDetailView(habit: habit)
                 } else {
                     TodayView()
