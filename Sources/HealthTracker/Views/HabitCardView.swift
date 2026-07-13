@@ -96,18 +96,25 @@ struct HabitCardView: View {
         }
     }
 
+    /// One session type per day: a single-select. Tap to set today's type, tap again to clear.
+    /// Weekly progress across types is shown in the footer.
     private func choiceLogger(_ field: HabitField) -> some View {
-        let counts = habit.targets.first { $0.kind == .weeklyChoiceCounts }?.counts ?? [:]
-        return HStack(spacing: 10) {
+        let selected = today.string(field.id)
+        return HStack(spacing: 8) {
             ForEach(field.choices ?? [], id: \.self) { option in
-                ChoiceStepper(
-                    option: option,
-                    count: state.sessionCount(habit, choice: option),
-                    target: counts[option] ?? 0,
-                    color: color,
-                    onAdd: { state.addSession(habit, choice: option) },
-                    onRemove: { state.removeSession(habit, choice: option) }
-                )
+                let isOn = selected == option
+                Button {
+                    state.setDaily(habit, field: field.id, value: isOn ? nil : option)
+                } label: {
+                    Text(option.capitalized)
+                        .font(.callout.weight(.medium))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(isOn ? color : color.opacity(0.12),
+                                    in: RoundedRectangle(cornerRadius: 10))
+                        .foregroundStyle(isOn ? .white : color)
+                }
+                .buttonStyle(.plain)
             }
         }
     }
