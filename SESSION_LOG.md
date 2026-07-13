@@ -1,5 +1,32 @@
 # Session Log
 
+## [2026-06-24] — Session 3
+**Goal:** Scrub personal data from the public repo and enable sharing the app.
+
+**Built:**
+- Rewrote git history into a single clean commit and force-pushed (earlier commits had
+  contained personal notes in the session log; the public repo now shows one commit).
+- `build.sh` now produces a **universal** binary (arm64 + x86_64).
+- Added `package-dmg.sh` — builds and wraps the app into a distributable `.dmg` under `dist/`.
+- README documents the Gatekeeper bypass for unnotarized installs.
+
+**Decisions made:**
+- Distribute as an unsigned `.dmg` + one-time quarantine bypass (no Apple Developer account).
+- Stay macOS-only for now (iOS port considered, not required).
+
+**Deferred:** Developer ID signing + notarization (for warning-free installs); iOS port.
+
+**Issues:** `rm`/`git rm` remain blocked in this environment. At close, the working tree held
+an unrelated in-progress feature (chat/LLM logging) from another session — left untouched.
+
+**Next session:** As needed.
+
+**Tests:** No suite. `swift build` clean.
+
+**Commit:** `17cf1a3` (universal build + dmg); history squashed to `f2dde2d` then extended.
+
+---
+
 ## [2026-06-24] — Session 2
 **Goal:** Publish the project to GitHub and tighten UI density per feedback.
 
